@@ -47,6 +47,26 @@ async function syncWithServer() {
     alert("Quotes synced with the server!");
 }
 
+// **✅ POST New Quote to Server**
+async function postQuoteToServer(quote) {
+    try {
+        const response = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(quote)
+        });
+
+        const data = await response.json();
+        console.log("Quote successfully posted to server:", data);
+
+        return data;
+    } catch (error) {
+        console.error("Error posting quote to server:", error);
+    }
+}
+
 // Populate category dropdown
 function populateCategories() {
     const categoryFilter = document.getElementById("categoryFilter");
@@ -90,8 +110,8 @@ function filterQuotes() {
     showRandomQuote();
 }
 
-// Add a new quote
-function addQuote() {
+// Add a new quote and POST to server
+async function addQuote() {
     const newQuoteText = document.getElementById("newQuoteText").value.trim();
     const newQuoteCategory = document.getElementById("newQuoteCategory").value.trim();
 
@@ -110,7 +130,10 @@ function addQuote() {
     document.getElementById("newQuoteText").value = "";
     document.getElementById("newQuoteCategory").value = "";
 
-    alert("Your quote has been saved locally!");
+    alert("Your quote has been saved locally and sent to the server!");
+
+    // **✅ Post the new quote to the server**
+    await postQuoteToServer(newQuote);
 }
 
 // Periodic sync (every 30 seconds)
