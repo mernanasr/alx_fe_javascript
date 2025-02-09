@@ -5,8 +5,8 @@ const quotes = [
     { text: "Do what you can, with what you have, where you are.", category: "Action" }
 ];
 
-// Function to display a random quote
-function displayRandomQuote() {
+// Function to display a random quote (Renamed to match the expected name)
+function showRandomQuote() {
     const quoteDisplay = document.getElementById("quoteDisplay");
 
     // Select a random quote
@@ -35,12 +35,12 @@ function addQuote() {
     document.getElementById("newQuoteCategory").value = "";
 
     // Show the new quote immediately
-    displayRandomQuote();
+    showRandomQuote();
 }
 
 // Event listeners
-document.getElementById("newQuote").addEventListener("click", displayRandomQuote);
+document.getElementById("newQuote").addEventListener("click", showRandomQuote);
 document.getElementById("addQuoteBtn").addEventListener("click", addQuote);
 
 // Show a random quote on page load
-window.onload = displayRandomQuote;
+window.onload = showRandomQuote;
