@@ -4,30 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dynamic Quote Generator</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        #quoteDisplay {
+            font-size: 1.5em;
+            margin: 20px;
+            padding: 20px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            display: inline-block;
+        }
+        input {
+            padding: 8px;
+            margin: 5px;
+            width: 80%;
+            max-width: 300px;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <h1>Dynamic Quote Generator</h1>
 
-    <!-- Dropdown to select category -->
-    <label for="categorySelect">Select Category:</label>
-    <select id="categorySelect">
-        <option value="all">All</option>
-    </select>
-
-    <!-- Quote Display Area -->
-    <div id="quoteDisplay"></div>
-    
-    <!-- Buttons -->
+    <!-- Displaying Quotes -->
+    <div id="quoteDisplay">Click the button to see a quote!</div>
+    <br>
     <button id="newQuote">Show New Quote</button>
 
-    <!-- Form to Add New Quote -->
-    <div>
-        <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
-        <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
-        <button id="addQuote">Add Quote</button>
-    </div>
+    <!-- Add New Quote -->
+    <h2>Add Your Own Quote</h2>
+    <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
+    <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
+    <button id="addQuoteBtn">Add Quote</button>
 
     <script src="script.js"></script>
 </body>
 </html>
+
