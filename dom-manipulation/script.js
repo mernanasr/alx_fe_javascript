@@ -12,6 +12,16 @@ function saveQuotes() {
     localStorage.setItem("quotes", JSON.stringify(quotes));
 }
 
+// **✅ Display a notification for updates/conflicts**
+function showNotification(message, type = "info") {
+    const notification = document.createElement("div");
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+
+    setTimeout(() => notification.remove(), 3000);
+}
+
 // **✅ Fetch quotes from server**
 async function fetchQuotesFromServer() {
     try {
@@ -19,11 +29,12 @@ async function fetchQuotesFromServer() {
         const serverQuotes = await response.json();
 
         return serverQuotes.map(q => ({
-            text: q.title, // JSONPlaceholder stores titles, adapting it for quotes
+            text: q.title, // JSONPlaceholder uses "title", adapting it for quotes
             category: "General"
         }));
     } catch (error) {
         console.error("Error fetching quotes from server:", error);
+        showNotification("Failed to sync with server!", "error");
         return [];
     }
 }
@@ -32,16 +43,18 @@ async function fetchQuotesFromServer() {
 async function syncQuotes() {
     const serverQuotes = await fetchQuotesFromServer();
 
-    // Merge server and local quotes (avoid duplicates)
+    // Merge server and local quotes, avoiding duplicates
     const mergedQuotes = [...serverQuotes, ...quotes].filter((quote, index, self) =>
         index === self.findIndex(q => q.text === quote.text)
     );
 
+    if (mergedQuotes.length !== quotes.length) {
+        showNotification("Quotes synced with server!", "success");
+    }
+
     quotes = mergedQuotes;
     saveQuotes();
     populateCategories();
-
-    alert("Quotes synced with the server!");
 }
 
 // **✅ Post new quote to the server**
@@ -57,27 +70,12 @@ async function postQuoteToServer(quote) {
 
         const data = await response.json();
         console.log("Quote successfully posted to server:", data);
+        showNotification("Quote successfully saved to server!", "success");
         return data;
     } catch (error) {
         console.error("Error posting quote to server:", error);
+        showNotification("Failed to save quote to server!", "error");
     }
-}
-
-// Populate category dropdown dynamically
-function populateCategories() {
-    const categoryFilter = document.getElementById("categoryFilter");
-    categoryFilter.innerHTML = '<option value="all">All Categories</option>';
-
-    const uniqueCategories = [...new Set(quotes.map(quote => quote.category))];
-
-    uniqueCategories.forEach(category => {
-        const option = document.createElement("option");
-        option.value = category;
-        option.textContent = category;
-        categoryFilter.appendChild(option);
-    });
-
-    categoryFilter.value = localStorage.getItem("selectedCategory") || "all";
 }
 
 // **✅ Display a random quote**
@@ -112,7 +110,7 @@ async function addQuote() {
     const newQuoteCategory = document.getElementById("newQuoteCategory").value.trim();
 
     if (newQuoteText === "" || newQuoteCategory === "") {
-        alert("Please enter both quote text and category.");
+        showNotification("Please enter both quote text and category!", "error");
         return;
     }
 
@@ -126,7 +124,7 @@ async function addQuote() {
     document.getElementById("newQuoteText").value = "";
     document.getElementById("newQuoteCategory").value = "";
 
-    alert("Your quote has been saved locally and sent to the server!");
+    showNotification("Your quote has been saved locally!", "success");
 
     // **✅ Post the new quote to the server**
     await postQuoteToServer(newQuote);
