@@ -1,4 +1,4 @@
-const API_URL = "https://jsonplaceholder.typicode.com/posts"; // Simulated API (modify for real use)
+const API_URL = "https://jsonplaceholder.typicode.com/posts"; // Simulated API
 
 // Load quotes from localStorage or initialize default quotes
 let quotes = JSON.parse(localStorage.getItem("quotes")) || [
@@ -7,11 +7,47 @@ let quotes = JSON.parse(localStorage.getItem("quotes")) || [
     { text: "Do what you can, with what you have, where you are.", category: "Action" }
 ];
 
+// Save quotes to localStorage
 function saveQuotes() {
     localStorage.setItem("quotes", JSON.stringify(quotes));
 }
 
-// Populate categories dynamically
+// Fetch quotes from the mock server
+async function fetchQuotesFromServer() {
+    try {
+        const response = await fetch(API_URL);
+        const serverQuotes = await response.json();
+
+        // Convert server response to match quote format
+        const serverFormattedQuotes = serverQuotes.map(q => ({
+            text: q.title,
+            category: "General"
+        }));
+
+        return serverFormattedQuotes;
+    } catch (error) {
+        console.error("Error fetching quotes from server:", error);
+        return [];
+    }
+}
+
+// Sync with the server and handle conflicts
+async function syncWithServer() {
+    const serverQuotes = await fetchQuotesFromServer();
+
+    // Merge server and local quotes (avoid duplicates)
+    const mergedQuotes = [...serverQuotes, ...quotes].filter((quote, index, self) =>
+        index === self.findIndex(q => q.text === quote.text)
+    );
+
+    quotes = mergedQuotes;
+    saveQuotes();
+    populateCategories();
+
+    alert("Quotes synced with the server!");
+}
+
+// Populate category dropdown
 function populateCategories() {
     const categoryFilter = document.getElementById("categoryFilter");
     categoryFilter.innerHTML = '<option value="all">All Categories</option>';
@@ -74,39 +110,7 @@ function addQuote() {
     document.getElementById("newQuoteText").value = "";
     document.getElementById("newQuoteCategory").value = "";
 
-    syncWithServer(newQuote); // Send new quote to server
-}
-
-// Sync with server (fetch latest quotes)
-async function syncWithServer(newQuote = null) {
-    try {
-        const response = await fetch(API_URL);
-        const serverQuotes = await response.json();
-
-        const serverFormattedQuotes = serverQuotes.map(q => ({
-            text: q.title,
-            category: "General"
-        }));
-
-        // Merge local and server data (Server takes precedence)
-        const mergedQuotes = [...serverFormattedQuotes, ...quotes];
-
-        // Remove duplicates
-        quotes = mergedQuotes.filter((quote, index, self) =>
-            index === self.findIndex(q => q.text === quote.text)
-        );
-
-        saveQuotes();
-        populateCategories();
-
-        if (newQuote) {
-            alert("Your quote has been saved locally and will be synced!");
-        } else {
-            alert("Synced with the server!");
-        }
-    } catch (error) {
-        console.error("Sync error:", error);
-    }
+    alert("Your quote has been saved locally!");
 }
 
 // Periodic sync (every 30 seconds)
