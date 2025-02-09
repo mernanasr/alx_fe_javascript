@@ -19,7 +19,7 @@
             background-color: #f9f9f9;
             display: inline-block;
         }
-        input, button {
+        select, input, button {
             padding: 10px;
             margin: 5px;
             width: 80%;
@@ -40,15 +40,21 @@
 <body>
     <h1>Dynamic Quote Generator</h1>
 
+    <!-- Category Filter -->
+    <select id="categoryFilter">
+        <option value="all">All Categories</option>
+    </select>
+
     <!-- Display Quotes -->
     <div id="quoteDisplay">Click the button to see a quote!</div>
     <br>
     <button id="newQuote">Show New Quote</button>
 
-    <!-- Import/Export Quotes -->
-    <h2>Import/Export Quotes</h2>
-    <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
-    <button onclick="exportToJsonFile()">Export Quotes</button>
+    <!-- Add New Quote -->
+    <h2>Add Your Own Quote</h2>
+    <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
+    <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
+    <button onclick="addQuote()">Add Quote</button>
 
     <script src="script.js"></script>
 </body>
