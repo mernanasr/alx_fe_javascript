@@ -35,26 +35,29 @@
         button:hover {
             background-color: #0056b3;
         }
+        #syncStatus {
+            color: green;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <h1>Dynamic Quote Generator</h1>
 
-    <!-- Category Filter -->
     <select id="categoryFilter">
         <option value="all">All Categories</option>
     </select>
 
-    <!-- Display Quotes -->
     <div id="quoteDisplay">Click the button to see a quote!</div>
     <br>
     <button id="newQuote">Show New Quote</button>
 
-    <!-- Add New Quote -->
     <h2>Add Your Own Quote</h2>
     <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
     <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
     <button onclick="addQuote()">Add Quote</button>
+
+    <p id="syncStatus"></p>
 
     <script src="script.js"></script>
 </body>
