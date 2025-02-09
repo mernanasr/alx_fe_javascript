@@ -19,20 +19,18 @@
             background-color: #f9f9f9;
             display: inline-block;
         }
-        input {
-            padding: 8px;
+        input, button {
+            padding: 10px;
             margin: 5px;
             width: 80%;
             max-width: 300px;
+            border-radius: 5px;
         }
         button {
-            padding: 10px 15px;
-            margin: 5px;
             background-color: #007BFF;
             color: white;
             border: none;
             cursor: pointer;
-            border-radius: 5px;
         }
         button:hover {
             background-color: #0056b3;
@@ -42,16 +40,15 @@
 <body>
     <h1>Dynamic Quote Generator</h1>
 
-    <!-- Displaying Quotes -->
+    <!-- Display Quotes -->
     <div id="quoteDisplay">Click the button to see a quote!</div>
     <br>
     <button id="newQuote">Show New Quote</button>
 
-    <!-- Add New Quote -->
-    <h2>Add Your Own Quote</h2>
-    <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
-    <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
-    <button id="addQuoteBtn">Add Quote</button>
+    <!-- Import/Export Quotes -->
+    <h2>Import/Export Quotes</h2>
+    <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
+    <button onclick="exportToJsonFile()">Export Quotes</button>
 
     <script src="script.js"></script>
 </body>
